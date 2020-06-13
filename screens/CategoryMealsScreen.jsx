@@ -4,13 +4,19 @@ import { View, Text, StyleSheet, Button } from "react-native";
 
 import { CATEGORIES, MEALS } from "../data/dummy-data";
 import { FlatList } from "react-native-gesture-handler";
+import MealItem from "../components/MealItem";
 
 const CategoryMealScreen = (props) => {
   const renderMealItem = (itemData) => {
     return (
-      <View>
-        <Text>{itemData.item.title}</Text>
-      </View>
+      <MealItem
+        title={itemData.item.title}
+        duration={itemData.item.duration}
+        complexity={itemData.item.complexity}
+        image={itemData.item.imageUrl}
+        affordability={itemData.item.affordability}
+        onSelectMeal={() => {}}
+      />
     );
   };
 
@@ -22,7 +28,11 @@ const CategoryMealScreen = (props) => {
 
   return (
     <View style={styles.screen}>
-      <FlatList data={displayedMeals} renderItem={renderMealItem} />
+      <FlatList
+        data={displayedMeals}
+        renderItem={renderMealItem}
+        style={{ width: "100%" }}
+      />
     </View>
   );
 };
@@ -41,6 +51,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    padding: 15,
   },
 });
 
