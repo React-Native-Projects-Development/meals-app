@@ -16,11 +16,9 @@ const CategoryMealScreen = (props) => {
 
   const catId = props.navigation.getParam("categoryId");
 
-  const displayedMeals = MEALS.filter(
-    (meal) => meal.categoryIds.indexOf(catId) >= 0
+  const displayedMeals = MEALS.filter((meal) =>
+    meal.categoryIds.includes(catId)
   ); // -1 will be returned if the category is not part of the categoryIds if its 0 or greater than we know the catId of the meal is included in the categoryIds
-
-  console.log(displayedMeals);
 
   return (
     <View style={styles.screen}>
