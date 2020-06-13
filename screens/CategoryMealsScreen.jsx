@@ -1,6 +1,6 @@
 import React from "react";
 
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, StyleSheet } from "react-native";
 
 import { CATEGORIES, MEALS } from "../data/dummy-data";
 import { FlatList } from "react-native-gesture-handler";
@@ -15,7 +15,15 @@ const CategoryMealScreen = (props) => {
         complexity={itemData.item.complexity}
         image={itemData.item.imageUrl}
         affordability={itemData.item.affordability}
-        onSelectMeal={() => {}}
+        onSelectMeal={() => {
+          props.navigation.navigate({
+            routeName: "MealDetail",
+            params: {
+              ingredients: itemData.item.ingredients,
+              steps: itemData.item.steps,
+            },
+          });
+        }}
       />
     );
   };
