@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5f5f5",
     borderRadius: 10,
     overflow: "hidden",
+    marginVertical: 5,
   },
   bgImage: {
     width: "100%",
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
     height: "85%",
   },
   mealDetail: {
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     alignItems: "center",
     height: "15%",
   },
