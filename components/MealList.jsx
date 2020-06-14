@@ -18,6 +18,10 @@ const MealList = (props) => {
               title: itemData.item.title,
               ingredients: itemData.item.ingredients,
               steps: itemData.item.steps,
+              duration: itemData.item.duration,
+              complexity: itemData.item.complexity,
+              affordability: itemData.item.affordability,
+              image: itemData.item.imageUrl,
             },
           });
         }}
