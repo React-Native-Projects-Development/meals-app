@@ -1,9 +1,11 @@
 import React from "react";
 
-import { StyleSheet, FlatList } from "react-native";
+import { FlatList } from "react-native";
 
 import { CATEGORIES } from "../data/dummy-data";
 import CategoryGridTile from "../components/CategoryGridTile";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import CustomHeaderButton from "../components/HeaderButton";
 
 const CategoriesScreen = (props) => {
   // When Using CategoriesScreen on our react navigation component these components get a special prop
@@ -33,8 +35,21 @@ const CategoriesScreen = (props) => {
 
 // In JS Functions are objects therefore we can add properties to them
 
-CategoriesScreen.navigationOptions = {
-  headerTitle: "Meal Categories",
+CategoriesScreen.navigationOptions = (navData) => {
+  return {
+    headerTitle: "Meal Categories",
+    headerLeft: () => (
+      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+        <Item
+          iconName="ios-menu"
+          title="Menu"
+          onPress={() => {
+            navData.navigation.toggleDrawer();
+          }}
+        />
+      </HeaderButtons>
+    ),
+  };
 };
 
 export default CategoriesScreen;
