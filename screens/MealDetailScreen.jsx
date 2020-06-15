@@ -1,18 +1,13 @@
-import React from "react";
+import React, { useEffect, useCallback } from "react";
 
-import {
-  ScrollView,
-  View,
-  Text,
-  StyleSheet,
-  Button,
-  Image,
-} from "react-native";
+import { ScrollView, View, Text, StyleSheet, Image } from "react-native";
 
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 import HeaderButton from "../components/HeaderButton";
 import DefaultText from "../components/DefaultText";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleFavorite } from "../store/actions/meals";
 
 const ListItem = (props) => (
   <View style={styles.listItem}>
@@ -21,27 +16,44 @@ const ListItem = (props) => (
 );
 
 const MealDetailScreen = (props) => {
-  const steps = props.navigation.getParam("steps");
-  const ingredients = props.navigation.getParam("ingredients");
-  const duration = props.navigation.getParam("duration");
-  const complexity = props.navigation.getParam("complexity");
-  const affordability = props.navigation.getParam("affordability");
-  const image = props.navigation.getParam("image");
+  const meal = props.navigation.getParam("meal");
+  const { id } = meal;
+  const currentMealIsFavorite = useSelector((state) =>
+    state.meals.favoriteMeals.some((meal) => meal.id === id)
+  );
+
+  const dispatch = useDispatch();
+
+  const toggleFavoriteHandler = useCallback(() => {
+    dispatch(toggleFavorite(id));
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    props.navigation.setParams({
+      toggleFavorite: toggleFavoriteHandler,
+    });
+  }, [toggleFavoriteHandler]);
+
+  useEffect(() => {
+    props.navigation.setParams({
+      isFav: currentMealIsFavorite,
+    });
+  }, [currentMealIsFavorite]);
 
   return (
     <ScrollView>
-      <Image source={{ uri: image }} style={styles.image} />
+      <Image source={{ uri: meal.imageUrl }} style={styles.image} />
       <View style={styles.details}>
-        <DefaultText>{duration}m</DefaultText>
-        <DefaultText>{complexity.toUpperCase()}</DefaultText>
-        <DefaultText>{affordability.toUpperCase()}</DefaultText>
+        <DefaultText>{meal.duration}m</DefaultText>
+        <DefaultText>{meal.complexity.toUpperCase()}</DefaultText>
+        <DefaultText>{meal.affordability.toUpperCase()}</DefaultText>
       </View>
       <Text style={styles.title}>Ingredients</Text>
-      {ingredients.map((ingredient) => (
+      {meal.ingredients.map((ingredient) => (
         <ListItem key={ingredient}>{ingredient}</ListItem>
       ))}
       <Text style={styles.title}>Steps</Text>
-      {steps.map((step) => (
+      {meal.steps.map((step) => (
         <ListItem key={step}>{step}</ListItem>
       ))}
     </ScrollView>
@@ -49,17 +61,18 @@ const MealDetailScreen = (props) => {
 };
 
 MealDetailScreen.navigationOptions = (navigationData) => {
-  const title = navigationData.navigation.getParam("title");
+  const meal = navigationData.navigation.getParam("meal");
+  const toggleFavorite = navigationData.navigation.getParam("toggleFavorite");
+  const isFavorite = navigationData.navigation.getParam("isFav");
+
   return {
-    headerTitle: title,
+    headerTitle: meal.title,
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
           title="Favorite"
-          iconName="ios-star-outline"
-          onPress={() => {
-            console.log("Marked as Favorite!");
-          }}
+          iconName={isFavorite ? "ios-star" : "ios-star-outline"}
+          onPress={toggleFavorite}
         />
       </HeaderButtons>
     ),
